@@ -1,13 +1,16 @@
 import React from 'react'
 import { createAnecdote } from '../reducers/anecdoteReducer'
+import { showNotificationWithTimeout } from '../reducers/notificationReducer'
 
 const NewAnecdote = (props) => {
 
   const addAnecdote = (event) => {
     event.preventDefault()
     props.store.dispatch(
-      createAnecdote(event.target.anecdote.value)
+      createAnecdote(event.target.anecdote.value), 
+      showNotificationWithTimeout(props.store.dispatch, `You voted '${event.target.anecdote.value}'`)
     )
+    showNotificationWithTimeout(props.store.dispatch, `You voted '${event.target.anecdote.value}'`)
     event.target.anecdote.value = ''
   }
   return (
