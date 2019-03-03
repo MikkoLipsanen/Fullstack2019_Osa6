@@ -5,8 +5,6 @@ const notificationReducer = (state=initialState, action) => {
       case 'SHOW_NOTIFICATION':
         return action.text
       case 'HIDE_NOTIFICATION':
-        console.log(nextNotificationId)
-        console.log(action.id)
         if (nextNotificationId === action.id)
           return initialState
         return state
@@ -15,23 +13,25 @@ const notificationReducer = (state=initialState, action) => {
     }
 }
 
-function showNotification(text) {
-    return { type: 'SHOW_NOTIFICATION', text }
+function showNotification(id, text) {
+    return { type: 'SHOW_NOTIFICATION', id, text }
   }
-  function hideNotification(id) {
+function hideNotification(id) {
     return { type: 'HIDE_NOTIFICATION', id }
-  }
+}
   
-  let nextNotificationId = 0
+let nextNotificationId = 0
 
-  export function showNotificationWithTimeout(dispatch, text) {
-    nextNotificationId++
-    const id = nextNotificationId
-    dispatch(showNotification(text))
+export function showNotificationWithTimeout(text) {
+  return function (dispatch) {
+  nextNotificationId++
+  const id = nextNotificationId
+  dispatch(showNotification(id, text))
   
-    setTimeout(() => {
-      dispatch(hideNotification(id))
-    }, 5000)
+  setTimeout(() => {
+    dispatch(hideNotification(id))
+  }, 5000)
   }
+}
 
 export default notificationReducer

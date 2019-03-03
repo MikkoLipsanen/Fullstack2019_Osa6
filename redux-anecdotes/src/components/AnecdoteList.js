@@ -1,21 +1,25 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { vote } from '../reducers/anecdoteReducer'
 import { showNotificationWithTimeout } from '../reducers/notificationReducer'
 
-const AnecdoteList = ({store}) => {
+const AnecdoteList = (props) => {
+
+  const voteClicked = (value) => {
+    props.vote(value.id)
+    props.showNotificationWithTimeout(`You voted '${value.content}'`)
+  }
+
   return(
     <div>
-      {store.getState().anecdotes.map(anecdote =>
+      {props.anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => 
-              store.dispatch(vote(anecdote.id, anecdote.content),
-              showNotificationWithTimeout(store.dispatch, `You voted '${anecdote.content}'`))
-            }
+            <button onClick={() => voteClicked(anecdote)}
             >vote
             </button>
           </div>
@@ -25,4 +29,18 @@ const AnecdoteList = ({store}) => {
   )
 }
 
-export default AnecdoteList
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes
+  }
+}
+
+const mapDispatchToProps = {
+  vote, 
+  showNotificationWithTimeout,
+}
+
+export default connect(
+  mapStateToProps, 
+  mapDispatchToProps 
+  )(AnecdoteList)
