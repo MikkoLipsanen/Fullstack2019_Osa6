@@ -3,34 +3,29 @@ const initialState=('Welcome!')
 const notificationReducer = (state=initialState, action) => {
     switch (action.type) {
       case 'SHOW_NOTIFICATION':
-        return action.text
+        return action.data
       case 'HIDE_NOTIFICATION':
-        if (nextNotificationId === action.id)
-          return initialState
-        return state
+        return initialState
       default: 
         return state
     }
 }
 
-function showNotification(id, text) {
-    return { type: 'SHOW_NOTIFICATION', id, text }
-  }
-function hideNotification(id) {
-    return { type: 'HIDE_NOTIFICATION', id }
-}
-  
-let nextNotificationId = 0
+export const showNotificationWithTimeout = (text, time) => {
+  return async dispatch => {
+    console.log('time', time)
+    const ms = time * 1000
 
-export function showNotificationWithTimeout(text) {
-  return function (dispatch) {
-  nextNotificationId++
-  const id = nextNotificationId
-  dispatch(showNotification(id, text))
+    dispatch({
+      type: 'SHOW_NOTIFICATION', 
+      data: text,
+    })
   
-  setTimeout(() => {
-    dispatch(hideNotification(id))
-  }, 5000)
+    setTimeout(() => {
+    dispatch({
+      type: 'HIDE_NOTIFICATION', 
+    })
+    }, ms)   
   }
 }
 

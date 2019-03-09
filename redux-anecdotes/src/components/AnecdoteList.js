@@ -4,18 +4,19 @@ import { vote } from '../reducers/anecdoteReducer'
 import { showNotificationWithTimeout } from '../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
+  console.log(props.anecdotes)
 
   const voteClicked = (value) => {
     props.vote(value.id)
-    props.showNotificationWithTimeout(`You voted '${value.content}'`)
+    props.showNotificationWithTimeout(`You voted '${value.content}'`, 10)
   }
-
+  
   return(
     <div>
       {props.anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
-            {anecdote.content}
+            {JSON.stringify(anecdote.content)}
           </div>
           <div>
             has {anecdote.votes}
